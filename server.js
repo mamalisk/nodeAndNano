@@ -75,20 +75,16 @@ server.get('/', function(req,res){
 
 
 server.get('/users',function(req,res){
-//   users.insert({ username : 'first_user', password : 'password123', admin : true},
-//   'first_user', function(err, body){
-//          if(!err)
-//            console.log(body);
+    var username = 'user' + Math.random().toString();
+    idprov.insertUser(FootmanUser(username,'P455w0rd',true))
            res.render('index.jade', {
                locals : {
-                   title : 'User Created: first_user'
+                   title : 'User Created: ' + username
                    ,description: 'User Creation page'
                    ,author: 'mamalisk'
                    ,analyticssiteid: 'TBD'
                }
            });
-//       }
-
 });
 
 
@@ -111,7 +107,6 @@ function NotFound(msg){
 
 console.log('Listening on http://0.0.0.0:' + port );
 idprov = new IDProvider('http://localhost:5984','footmanusers')
-idprov.insertUser(FootmanUser('user' + Math.random().toString(),'P455w0rd',true))
 
 
 // FOOTMAN USER

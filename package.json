@@ -1,7 +1,7 @@
 {
-  "name": "YOUR-PROJECT-NAME-HERE",
-  "description": "YOUR PROJECT DESCRIPTION HERE",
-  "author": "YOUR NAME <your@emailaddress.com>",
+  "name": "CreateUser",
+  "description": "Create User Service",
+  "author": "Kostas Mamalis <mamalis.kostas@gmail.com>",
   "version": "0.0.1",
   "dependencies": {
     "connect": "1.8.5",
@@ -13,7 +13,8 @@
   "devDependencies": {
     "vows": "0.5.x",
 	"mocha": "*",
-	"should": "*"
+	"should": "*",
+    "nano" : "*"
   },
   "engine": "node >= 0.6.6"
 }

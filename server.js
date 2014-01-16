@@ -2,7 +2,11 @@
 var connect = require('connect')
     , express = require('express')
     , io = require('socket.io')
-    , port = (process.env.PORT || 8081);
+    , port = (process.env.PORT || 8081)
+    , nano = require('nano')
+    , IDProvider = require('./idprov/idProvider')
+
+var idprov;
 
 //Setup Express
 var server = express.createServer();
@@ -14,6 +18,7 @@ server.configure(function(){
     server.use(express.session({ secret: "shhhhhhhhh!"}));
     server.use(connect.static(__dirname + '/static'));
     server.use(server.router);
+
 });
 
 //setup the errors
@@ -69,6 +74,24 @@ server.get('/', function(req,res){
 });
 
 
+server.get('/users',function(req,res){
+//   users.insert({ username : 'first_user', password : 'password123', admin : true},
+//   'first_user', function(err, body){
+//          if(!err)
+//            console.log(body);
+           res.render('index.jade', {
+               locals : {
+                   title : 'User Created: first_user'
+                   ,description: 'User Creation page'
+                   ,author: 'mamalisk'
+                   ,analyticssiteid: 'TBD'
+               }
+           });
+//       }
+
+});
+
+
 //A Route for Creating a 500 Error (Useful to keep around)
 server.get('/500', function(req, res){
     throw new Error('This is a 500 Error');
@@ -87,3 +110,42 @@ function NotFound(msg){
 
 
 console.log('Listening on http://0.0.0.0:' + port );
+idprov = new IDProvider('http://localhost:5984','footmanusers')
+idprov.insertUser(FootmanUser('user' + Math.random().toString(),'P455w0rd',true))
+
+
+// FOOTMAN USER
+
+function FootmanUser(username, password, isAdmin){
+
+    if(typeof username !== 'string') {
+        throw new Error("Invalid string: " + username);
+    }
+
+    if(typeof password !== 'string') {
+        throw new Error("Invalid string: " + password);
+    }
+
+    if(typeof isAdmin !== 'boolean') {
+        throw new Error("Invalid boolean: " + isAdmin);
+    }
+    this.username = username
+    this.password = password
+    this.isAdmin = isAdmin
+    return this;
+}
+
+FootmanUser.prototype = {
+    username : 'user' + Math.random().toString(),
+    password : 'P455w0rd',
+    isAdmin : false
+}
+
+// Crockford's technique
+
+var createObject = function (o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+};
+
